@@ -16,3 +16,4 @@
 \\Mac\Home\Documents\GitHub\Sketch\SchetsEditorC\obj\Debug\net6.0-windows\7.5-SchetsEditorC.genruntimeconfig.cache
 \\Mac\Home\Documents\GitHub\Sketch\SchetsEditorC\obj\Debug\net6.0-windows\ref\7.5-SchetsEditorC.dll
 \\Mac\Home\Documents\GitHub\Sketch\SchetsEditorC\obj\Debug\net6.0-windows\SchetsControl.resources
+\\Mac\Home\Documents\GitHub\Sketch\SchetsEditorC\obj\Debug\net6.0-windows\SchetsWin.resources

@@ -133,7 +133,7 @@ public class GumTool : PenTool
 
 public class CirkelTool : TweepuntTool
 {
-    public override string ToString() { return "kader"; }
+    public override string ToString() { return "cirkel"; }
 
     public override void Bezig(Graphics g, Point p1, Point p2)
     {
