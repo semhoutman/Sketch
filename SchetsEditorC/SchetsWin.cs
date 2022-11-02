@@ -86,13 +86,14 @@ public class SchetsWin : Form
         menu.MergeAction = MergeAction.MatchOnly;
         
         ToolStripDropDownItem savemenu = new ToolStripMenuItem("Opslaan");
-        savemenu.DropDownItems.Add("Opslaan als afbeelding...");
+        savemenu.DropDownItems.Add("Opslaan als afbeelding...", null, this.saving);
         savemenu.DropDownItems.Add("Opslaan als object...");
         menu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {savemenu});
         menu.DropDownItems.Add("Sluiten", null, this.afsluiten);
         menuStrip.Items.Add(menu);
 
     }
+
    
 
     private void maakToolMenu(ICollection<ISchetsTool> tools)
@@ -169,5 +170,13 @@ public class SchetsWin : Form
         foreach (string k in kleuren)
             cbb.Items.Add(k);
         cbb.SelectedIndex = 0;
+    }
+     private void saving(object sender, System.EventArgs e)
+    {
+        SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+        saveFileDialog1.Filter = "JPeg Image|*.jpg|PNG Image|*.png";
+        saveFileDialog1.Title = "Save an Image File";
+        saveFileDialog1.ShowDialog ();
+
     }
 }
