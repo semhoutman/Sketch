@@ -131,12 +131,21 @@ public class GumTool : PenTool
     }
 }
 
-public class CirkelTool : TweepuntTool
+public class RandTool : TweepuntTool
 {
-    public override string ToString() { return "cirkel"; }
+    public override string ToString() { return "rand"; }
 
     public override void Bezig(Graphics g, Point p1, Point p2)
     {
         g.DrawEllipse(MaakPen(kwast, 3), TweepuntTool.Punten2Rechthoek(p1, p2));
+    }
+}
+public class CirkelTool : RandTool
+{
+    public override string ToString() { return "cirkel"; }
+
+    public override void Compleet(Graphics g, Point p1, Point p2)
+    {
+        g.FillEllipse(kwast, TweepuntTool.Punten2Rechthoek(p1, p2));
     }
 }

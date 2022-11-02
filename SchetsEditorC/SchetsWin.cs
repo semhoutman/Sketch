@@ -39,9 +39,9 @@ public class SchetsWin : Form
                                 , new LijnTool()
                                 , new RechthoekTool()
                                 , new VolRechthoekTool()
-                                , new TekstTool()
+                                , new RandTool ()
+                                , new CirkelTool() , new TekstTool()
                                 , new GumTool()
-                                , new CirkelTool ()
                                 };
         String[] deKleuren = { "Black", "Red", "Green", "Blue", "Yellow", "Magenta", "Cyan" };
 
