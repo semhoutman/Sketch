@@ -84,10 +84,16 @@ public class SchetsWin : Form
     {   
         ToolStripMenuItem menu = new ToolStripMenuItem("File");
         menu.MergeAction = MergeAction.MatchOnly;
+        
+        ToolStripDropDownItem savemenu = new ToolStripMenuItem("Opslaan");
+        savemenu.DropDownItems.Add("Opslaan als afbeelding...");
+        savemenu.DropDownItems.Add("Opslaan als object...");
+        menu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {savemenu});
         menu.DropDownItems.Add("Sluiten", null, this.afsluiten);
         menuStrip.Items.Add(menu);
 
     }
+   
 
     private void maakToolMenu(ICollection<ISchetsTool> tools)
     {   
