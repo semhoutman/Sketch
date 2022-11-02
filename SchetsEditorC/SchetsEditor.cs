@@ -24,8 +24,8 @@ public class SchetsEditor : Form
         menu.DropDownItems.Add("Exit", null, this.afsluiten);
         ToolStripDropDownItem savemenu = new ToolStripMenuItem("Opslaan");
         savemenu.DropDownItems.Add("Opslaan als afbeelding...");
-        savemenu.DropDownItems.Add("Opslaan als object...");
-        menu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {savemenu}); 
+        savemenu.DropDownItems.Add("Opslaan als object...");        
+        menu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {savemenu});
 
         menuStrip.Items.Add(menu);
     }

@@ -86,6 +86,7 @@ public class SchetsWin : Form
         menu.MergeAction = MergeAction.MatchOnly;
         menu.DropDownItems.Add("Sluiten", null, this.afsluiten);
         menuStrip.Items.Add(menu);
+
     }
 
     private void maakToolMenu(ICollection<ISchetsTool> tools)
