@@ -173,12 +173,12 @@ public class SchetsWin : Form
             cbb.Items.Add(k);
         cbb.SelectedIndex = 0;
     }
-     private void saving(object sender, System.EventArgs e)
+    private void saving(object sender, System.EventArgs e)
     {
         SaveFileDialog saveFileDialog1 = new SaveFileDialog();
         saveFileDialog1.Filter = "JPeg Image|*.jpg|PNG Image|*.png";
         saveFileDialog1.Title = "Save an Image File";
-        Bitmap bitmap = new Bitmap(string "file.jpg");
+        Bitmap bitmap = new Bitmap(String "file.jpg");
         bitmap.Save("file.png", ImageFormat.Png); 
        
     }
