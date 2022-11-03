@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Windows.Forms;
 
 public class SchetsWin : Form
@@ -176,7 +178,8 @@ public class SchetsWin : Form
         SaveFileDialog saveFileDialog1 = new SaveFileDialog();
         saveFileDialog1.Filter = "JPeg Image|*.jpg|PNG Image|*.png";
         saveFileDialog1.Title = "Save an Image File";
-        saveFileDialog1.ShowDialog ();
-
+        Bitmap bitmap = new Bitmap(string "file.jpg");
+        bitmap.Save("file.png", ImageFormat.Png); 
+       
     }
 }
