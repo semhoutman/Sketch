@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Drawing.Text;
 using System.IO;
 using System.Windows.Forms;
 
@@ -91,6 +92,7 @@ public class SchetsWin : Form
         savemenu.DropDownItems.Add("Opslaan als afbeelding...", null, this.saving);
         savemenu.DropDownItems.Add("Opslaan als object...", null, this.savingbm);
         menu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {savemenu});
+        menu.DropDownItems.Add("Open Bitmap", null, this.openbm);
         menu.DropDownItems.Add("Sluiten", null, this.afsluiten);
         menuStrip.Items.Add(menu);
 
@@ -192,5 +194,16 @@ public class SchetsWin : Form
         {
             schetscontrol.schets.bitmap.Save(saveFileDialog1.FileName); 
         }    
+    }
+   private void openbm(object sender, System.EventArgs e)
+    {
+        OpenFileDialog openFileDialog1 = new OpenFileDialog();
+        openFileDialog1.Filter = "Image Files(*.jpg; *.jpeg; *.gif; *.bmp)|*.jpg; *.jpeg; *.gif; *.bmp";
+        if (openFileDialog1.ShowDialog() == DialogResult.OK)
+        {
+            Bitmap bit = new Bitmap(openFileDialog1.FileName);
+                 schetscontrol.schets.bitmap = bit;
+        }
+        this.Invalidate();
     }
 }
