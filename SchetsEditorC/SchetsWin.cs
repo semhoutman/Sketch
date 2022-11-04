@@ -204,6 +204,6 @@ public class SchetsWin : Form
             Bitmap bit = new Bitmap(openFileDialog1.FileName);
                  schetscontrol.schets.bitmap = bit;
         }
-        this.Invalidate();
+        schetscontrol.Invalidate();
     }
 }
