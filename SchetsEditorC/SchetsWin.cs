@@ -178,8 +178,9 @@ public class SchetsWin : Form
         SaveFileDialog saveFileDialog1 = new SaveFileDialog();
         saveFileDialog1.Filter = "JPeg Image|*.jpg|PNG Image|*.png";
         saveFileDialog1.Title = "Save an Image File";
-        Bitmap bitmap = new Bitmap(String "file.jpg");
-        bitmap.Save("file.png", ImageFormat.Png); 
-       
+        if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+        {
+            schetscontrol.schets.bitmap.Save(saveFileDialog1.FileName); 
+        }    
     }
 }
