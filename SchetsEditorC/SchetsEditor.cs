@@ -21,7 +21,6 @@ public class SchetsEditor : Form
     {   
         ToolStripDropDownItem menu = new ToolStripMenuItem("File");
         menu.DropDownItems.Add("Nieuw", null, this.nieuw);
-        menu.DropDownItems.Add("Open Bitmap", null, openbm);
         menu.DropDownItems.Add("Exit", null, this.afsluiten);
         
        
@@ -53,15 +52,5 @@ public class SchetsEditor : Form
     {   
         this.Close();
     }
-    private void openbm(object sender, System.EventArgs e)
-    {
-        OpenFileDialog openFileDialog1 = new OpenFileDialog();
-        openFileDialog1.Filter = "Image Files(*.jpg; *.jpeg; *.gif; *.bmp)|*.jpg; *.jpeg; *.gif; *.bmp";
-        if (openFileDialog1.ShowDialog() == DialogResult.OK)
-        {
-            Bitmap bit = new Bitmap(openFileDialog1.FileName);
-                 schetscontrol.schets.bitmap = bit;
-        }
-        this.Invalidate();
-    }
+
 }
