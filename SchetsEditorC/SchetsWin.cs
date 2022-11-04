@@ -89,7 +89,7 @@ public class SchetsWin : Form
         
         ToolStripDropDownItem savemenu = new ToolStripMenuItem("Opslaan");
         savemenu.DropDownItems.Add("Opslaan als afbeelding...", null, this.saving);
-        savemenu.DropDownItems.Add("Opslaan als object...");
+        savemenu.DropDownItems.Add("Opslaan als object...", null, this.savingbm);
         menu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {savemenu});
         menu.DropDownItems.Add("Sluiten", null, this.afsluiten);
         menuStrip.Items.Add(menu);
@@ -178,6 +178,16 @@ public class SchetsWin : Form
         SaveFileDialog saveFileDialog1 = new SaveFileDialog();
         saveFileDialog1.Filter = "JPeg Image|*.jpg|PNG Image|*.png";
         saveFileDialog1.Title = "Save an Image File";
+        if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+        {
+            schetscontrol.schets.bitmap.Save(saveFileDialog1.FileName); 
+        }    
+    }
+     private void savingbm(object sender, System.EventArgs e)
+    {
+        SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+        saveFileDialog1.Filter = "BitMap|*.bmp";
+        saveFileDialog1.Title = "Save a BitMap File";
         if (saveFileDialog1.ShowDialog() == DialogResult.OK)
         {
             schetscontrol.schets.bitmap.Save(saveFileDialog1.FileName); 
