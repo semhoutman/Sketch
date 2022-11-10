@@ -187,7 +187,7 @@ public class SchetsWin : Form
         penkleur.AutoSize = true; 
         
         //erbij gedaan
-        Button kleurKiezen = new Button(); paneel.Controls.Add(kleurKiezen);
+        kleurKiezen = new Button(); paneel.Controls.Add(kleurKiezen);
         kleurKiezen.BackColor = Color.Red;
         kleurKiezen.Location = new Point(380, 0);
         kleurKiezen.Click += maakKleurMenu;
