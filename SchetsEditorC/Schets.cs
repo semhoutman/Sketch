@@ -1,15 +1,41 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Security.Cryptography.X509Certificates;
 
 public class Schets
 {
     public Bitmap bitmap;
-        
+    public List<ObjectGetekend> Objectengetekend = new List<ObjectGetekend>();
+    public List<ObjectGetekend> savedObjectengetekend = new List<ObjectGetekend>();
+
     public Schets()
     {
         bitmap = new Bitmap(1, 1);
     }
+
+    public class ObjectGetekend
+    {
+        public ISchetsTool type;
+        public Point start;
+        public Point eind;
+        public Color kleur;
+        public int dikte;
+        public string c = "";
+
+        public ObjectGetekend (ISchetsTool type, Point start, Point eind, Color kleur, int dikte, string c)
+        {
+            this.type = type; 
+            this.start = start;
+            this.eind = eind;
+            this.kleur = kleur;
+            this.dikte = dikte; 
+            this.c = c;
+        }
+
+
+    }
+
     public Graphics BitmapGraphics
     {
         get { return Graphics.FromImage(bitmap); }

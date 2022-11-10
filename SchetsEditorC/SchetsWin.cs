@@ -5,6 +5,7 @@ using System.Drawing.Imaging;
 using System.Drawing.Text;
 using System.IO;
 using System.Windows.Forms;
+using static Schets;
 
 public class SchetsWin : Form
 {   
@@ -12,7 +13,19 @@ public class SchetsWin : Form
     SchetsControl schetscontrol;
     ISchetsTool huidigeTool;
     Panel paneel;
+    Button kleurKiezen;
+    Bitmap penGrootteBitmap;
+    Label penGrootteLabel;
     bool vast;
+    ISchetsTool[] tempTools = { new PenTool()
+                                , new LijnTool()
+                                , new RechthoekTool()
+                                , new VolRechthoekTool()
+                                , new RandTool()
+                                , new CirkelTool()
+                                , new TekstTool()
+                                , new GumTool()
+                                };
 
     private void veranderAfmeting(object o, EventArgs ea)
     {
@@ -67,7 +80,7 @@ public class SchetsWin : Form
                                         vast = false; 
                                     };
         schetscontrol.KeyPress +=  (object o, KeyPressEventArgs kpea) => 
-                                    {   huidigeTool.Letter  (schetscontrol, kpea.KeyChar); 
+                                    {   huidigeTool.Letter  (schetscontrol, kpea.KeyChar, kleurKiezen.BackColor, false); 
                                     };
         this.Controls.Add(schetscontrol);
 
@@ -89,10 +102,13 @@ public class SchetsWin : Form
         menu.MergeAction = MergeAction.MatchOnly;
         
         ToolStripDropDownItem savemenu = new ToolStripMenuItem("Opslaan");
+        ToolStripDropDownItem openmenu = new ToolStripMenuItem("Openen");
         savemenu.DropDownItems.Add("Opslaan als afbeelding...", null, this.saving);
-        savemenu.DropDownItems.Add("Opslaan als object...", null, this.savingbm);
+        savemenu.DropDownItems.Add("Opslaan als object...", null, this.SaveObject);
         menu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {savemenu});
-        menu.DropDownItems.Add("Open Bitmap", null, this.openbm);
+        openmenu.DropDownItems.Add("Open..", null, this.openen);
+        openmenu.DropDownItems.Add("Open object", null, this.openObject);
+        menu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {openmenu});
         menu.DropDownItems.Add("Sluiten", null, this.afsluiten);
         menuStrip.Items.Add(menu);
 
@@ -175,6 +191,7 @@ public class SchetsWin : Form
             cbb.Items.Add(k);
         cbb.SelectedIndex = 0;
     }
+    //GEWIJZIGD!
     private void saving(object sender, System.EventArgs e)
     {
         SaveFileDialog saveFileDialog1 = new SaveFileDialog();
@@ -185,6 +202,7 @@ public class SchetsWin : Form
             schetscontrol.schets.bitmap.Save(saveFileDialog1.FileName); 
         }    
     }
+    //GEWIJZIGD!
      private void savingbm(object sender, System.EventArgs e)
     {
         SaveFileDialog saveFileDialog1 = new SaveFileDialog();
@@ -195,7 +213,8 @@ public class SchetsWin : Form
             schetscontrol.schets.bitmap.Save(saveFileDialog1.FileName); 
         }    
     }
-   private void openbm(object sender, System.EventArgs e)
+    //GEWIJZIGD!
+   private void openen(object sender, System.EventArgs e)
     {
         OpenFileDialog openFileDialog1 = new OpenFileDialog();
         openFileDialog1.Filter = "Image Files(*.jpg; *.jpeg; *.gif; *.bmp)|*.jpg; *.jpeg; *.gif; *.bmp";
@@ -205,5 +224,72 @@ public class SchetsWin : Form
                  schetscontrol.schets.bitmap = bit;
         }
         schetscontrol.Invalidate();
+    }
+    //GEWIJZIGD!
+    private void SaveObject(object sender, EventArgs e)
+    {
+        SaveFileDialog dialog = new SaveFileDialog();
+        dialog.Filter = "Text File | *.txt";
+        if (dialog.ShowDialog() == DialogResult.OK)
+        {
+            string space = "";
+            foreach (ObjectGetekend obj in schetscontrol.schets.Objectengetekend)
+            { 
+                space += $"{obj.type.ToString()}~{obj.start.X}~{obj.eind.Y}~{obj.eind.X}~{obj.eind.Y}~{obj.kleur.A}-{obj.kleur.R}-{obj.kleur.G}-{obj.kleur.B}~{obj.dikte}~{obj.c};";
+            }
+            StreamWriter schrijver = new StreamWriter(dialog.OpenFile());
+
+            schrijver.Write(space);
+            schrijver.Dispose();
+            schrijver.Close();
+        }
+        
+    }
+    public void openObject(object sender, EventArgs e)
+    {
+        OpenFileDialog dialog = new OpenFileDialog();
+        dialog.Filter = "Text File | *.txt";
+        if (dialog.ShowDialog() == DialogResult.OK)
+        {
+                // Maak StreamReader  
+                using (StreamReader reader = new StreamReader(dialog.FileName))
+                {
+                    string line;
+                    schetscontrol.schets.Objectengetekend.Clear();
+                    // Lees regel voor regel  
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        string fullLine = line;
+                        string[] objectStrings = fullLine.Split(";");
+                        foreach (string objectString in objectStrings) {
+                            string[] objectProps = objectString.Split("~");
+                            if (objectProps.Length > 1) { 
+
+                                ISchetsTool tool = tempTools[0];
+
+                                foreach (ISchetsTool t in tempTools) {
+                                    if (t.ToString() == objectProps[0]) {
+                                        tool = t;
+                                    }
+                                }
+
+                            string[] rgbStrings = objectProps[5].Split("-");
+
+                                 ObjectGetekend gObj = new ObjectGetekend(   
+                                        tool,
+                                        new Point(Int32.Parse(objectProps[1]), Int32.Parse(objectProps[2])),
+                                        new Point(Int32.Parse(objectProps[3]), Int32.Parse(objectProps[4])),
+                                        Color.FromArgb(Int32.Parse(rgbStrings[0]), Int32.Parse(rgbStrings[1]), Int32.Parse(rgbStrings[2]), Int32.Parse(rgbStrings[3])), 
+                                        Int32.Parse(objectProps[6]),
+                                        objectProps[7]
+                                    );
+                                schetscontrol.schets.Objectengetekend.Add(gObj);
+                            }
+                        }
+                        schetscontrol.TekenBitmapUitLijst();
+                    }
+                }
+        }
+
     }
 }
