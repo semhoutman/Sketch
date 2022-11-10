@@ -1,28 +1,53 @@
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Collections.Generic;
+using System.Diagnostics;
+using static Schets;
+using System.Windows.Forms;
 
 public interface ISchetsTool
 {
     void MuisVast(SchetsControl s, Point p);
     void MuisDrag(SchetsControl s, Point p);
     void MuisLos(SchetsControl s, Point p);
-    void Letter(SchetsControl s, char c);
+    void Letter(SchetsControl s, char c, Color kleur, bool opened);
+    void Teken(SchetsControl s, Point start, Point end, Color kleur, int pendikte);
 }
 
 public abstract class StartpuntTool : ISchetsTool
 {
     protected Point startpunt;
     protected Brush kwast;
+    protected Color color;
+    protected int pengrootte;
+    protected int newPengrootte = 0;
 
     public virtual void MuisVast(SchetsControl s, Point p)
     {   startpunt = p;
     }
+    
     public virtual void MuisLos(SchetsControl s, Point p)
-    {   kwast = new SolidBrush(s.PenKleur);
+    {
+        kwast = new SolidBrush(s.PenKleur);
+        if (!color.IsEmpty) 
+        {
+            kwast = new SolidBrush(color);
+            color = Color.Empty;
+        }
+        pengrootte = s.PenGrootte;
+        if (newPengrootte != 0)
+        {
+            pengrootte = newPengrootte;
+            newPengrootte = 0;
+        }
     }
     public abstract void MuisDrag(SchetsControl s, Point p);
-    public abstract void Letter(SchetsControl s, char c);
+    public abstract void Letter(SchetsControl s, char c, Color Kleur, bool opened);
+   
+    public virtual void Teken(SchetsControl s, Point start, Point end, Color kleur, int dikte) {  }
+    
+    
 }
 
 public class TekstTool : StartpuntTool
@@ -31,7 +56,7 @@ public class TekstTool : StartpuntTool
 
     public override void MuisDrag(SchetsControl s, Point p) { }
 
-    public override void Letter(SchetsControl s, char c)
+    public override void Letter(SchetsControl s, char c, Color kleur, bool opened)
     {
         if (c >= 32)
         {
@@ -43,10 +68,17 @@ public class TekstTool : StartpuntTool
             gr.DrawString   (tekst, font, kwast, 
                                             this.startpunt, StringFormat.GenericTypographic);
             // gr.DrawRectangle(Pens.Black, startpunt.X, startpunt.Y, sz.Width, sz.Height);
+             if (!opened) 
+             {
+                s.schets.Objectengetekend.Add(new ObjectGetekend(this, this.startpunt, new Point(this.startpunt.X + (int)sz.Width, this.startpunt.Y + (int)sz.Height), kleur, pengrootte, c.ToString()));
+             }
             startpunt.X += (int)sz.Width;
             s.Invalidate();
         }
     }
+        public override void Teken(SchetsControl s, Point start, Point end, Color kleur, int pendikte) { }
+
+    
 }
 
 public abstract class TweepuntTool : StartpuntTool
@@ -74,8 +106,16 @@ public abstract class TweepuntTool : StartpuntTool
     {   base.MuisLos(s, p);
         this.Compleet(s.MaakBitmapGraphics(), this.startpunt, p);
         s.Invalidate();
+        s.schets.Objectengetekend.Add(new ObjectGetekend(this, this.startpunt, p, ((SolidBrush)kwast).Color, pengrootte, ""));
     }
-    public override void Letter(SchetsControl s, char c)
+    public override void Teken(SchetsControl s, Point start, Point end, Color kleur, int pendikte) {
+        color = kleur;
+        newPengrootte = pendikte;
+        base.MuisLos(s, start);
+        this.Compleet(s.MaakBitmapGraphics(), start, end);
+        s.Invalidate();
+    }
+    public override void Letter(SchetsControl s, char c, Color kleur, bool opened)
     {
     }
     public abstract void Bezig(Graphics g, Point p1, Point p2);
@@ -90,7 +130,7 @@ public class RechthoekTool : TweepuntTool
     public override string ToString() { return "kader"; }
 
     public override void Bezig(Graphics g, Point p1, Point p2)
-    {   g.DrawRectangle(MaakPen(kwast,3), TweepuntTool.Punten2Rechthoek(p1, p2));
+    {   g.DrawRectangle(MaakPen(kwast,pengrootte), TweepuntTool.Punten2Rechthoek(p1, p2));
     }
 }
     
@@ -131,6 +171,7 @@ public class GumTool : PenTool
     }
 }
 
+//VERANDERD!
 public class RandTool : TweepuntTool
 {
     public override string ToString() { return "rand"; }
@@ -140,6 +181,7 @@ public class RandTool : TweepuntTool
         g.DrawEllipse(MaakPen(kwast, 3), TweepuntTool.Punten2Rechthoek(p1, p2));
     }
 }
+//VERANDERD!
 public class CirkelTool : RandTool
 {
     public override string ToString() { return "cirkel"; }

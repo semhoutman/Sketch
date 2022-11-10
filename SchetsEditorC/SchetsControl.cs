@@ -1,16 +1,21 @@
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Runtime.CompilerServices;
 using System.Windows.Forms;
+using static Schets;
 
 public class SchetsControl : UserControl
 {   
     public Schets schets;
     private Color penkleur;
+    private int pengrootte = 3;
 
     public Color PenKleur
     { get { return penkleur; }
     }
+    public int PenGrootte
+    { get { return pengrootte; } }
     public Schets Schets
     { get { return schets;   }
     }
@@ -53,4 +58,18 @@ public class SchetsControl : UserControl
     {   string kleurNaam = ((ToolStripMenuItem)obj).Text;
         penkleur = Color.FromName(kleurNaam);
     }
+    public void TekenBitmapUitLijst()
+    {
+        schets.Schoon();
+        foreach (ObjectGetekend Objectg in schets.Objectengetekend)
+        { 
+            if(Objectg.type.ToString() == "tekst")
+            {
+                Objectg.type.Letter(this, Objectg.c.ToCharArray()[0], Objectg.kleur, true);
+
+            }else Objectg.type.Teken(this, Objectg.start, Objectg.eind, Objectg.kleur, Objectg.dikte);
+        }
+        this.Invalidate();
+    }
+    
 }
