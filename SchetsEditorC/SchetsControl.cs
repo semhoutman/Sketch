@@ -50,14 +50,11 @@ public class SchetsControl : UserControl
         schets.Roteer();
         this.Invalidate();
     }
-    public void VeranderKleur(object obj, EventArgs ea)
-    {   string kleurNaam = ((ComboBox)obj).Text;
-        penkleur = Color.FromName(kleurNaam);
+    public void VeranderKleur(Button kleurKiezen)
+    {   Color kleurNaam = kleurKiezen.BackColor;
+        penkleur = kleurNaam;
     }
-    public void VeranderKleurViaMenu(object obj, EventArgs ea)
-    {   string kleurNaam = ((ToolStripMenuItem)obj).Text;
-        penkleur = Color.FromName(kleurNaam);
-    }
+
     public void TekenBitmapUitLijst()
     {
         schets.Schoon();

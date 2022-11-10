@@ -137,9 +137,9 @@ public class SchetsWin : Form
         menu.DropDownItems.Add("Roteer", null, schetscontrol.Roteer );
         ToolStripMenuItem submenu = new ToolStripMenuItem("Kies kleur");
         foreach (string k in kleuren)
-            submenu.DropDownItems.Add(k, null, schetscontrol.VeranderKleurViaMenu);
-        menu.DropDownItems.Add(submenu);
-        menuStrip.Items.Add(menu);
+            submenu.DropDownItems.Add(k, null, schetscontrol.VeranderKleur);
+            menu.DropDownItems.Add(submenu);
+            menuStrip.Items.Add(menu);
     }
 
     private void maakToolButtons(ICollection<ISchetsTool> tools)
