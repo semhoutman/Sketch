@@ -135,11 +135,14 @@ public class SchetsWin : Form
         ToolStripMenuItem menu = new ToolStripMenuItem("Actie");
         menu.DropDownItems.Add("Clear", null, schetscontrol.Schoon );
         menu.DropDownItems.Add("Roteer", null, schetscontrol.Roteer );
-        ToolStripMenuItem submenu = new ToolStripMenuItem("Kies kleur");
-        foreach (string k in kleuren)
+        //erbij gedaan
+        menu.DropDownItems.Add("Kies kleur", null, maakKleurMenu);
+        menuStrip.Items.Add(menu);
+        //ToolStripMenuItem submenu = new ToolStripMenuItem("Kies kleur");
+       /* foreach (string k in kleuren)
             submenu.DropDownItems.Add(k, null, schetscontrol.VeranderKleur);
             menu.DropDownItems.Add(submenu);
-            menuStrip.Items.Add(menu);
+            menuStrip.Items.Add(menu);*/
     }
 
     private void maakToolButtons(ICollection<ISchetsTool> tools)
@@ -181,15 +184,21 @@ public class SchetsWin : Form
         Label penkleur = new Label(); paneel.Controls.Add(penkleur);
         penkleur.Text = "Penkleur:"; 
         penkleur.Location = new Point(180, 3); 
-        penkleur.AutoSize = true;               
+        penkleur.AutoSize = true; 
+        
+        //erbij gedaan
+        Button kleurKiezen = new Button(); paneel.Controls.Add(kleurKiezen);
+        kleurKiezen.BackColor = Color.Red;
+        kleurKiezen.Location = new Point(380, 0);
+        kleurKiezen.Click += maakKleurMenu;
             
-        ComboBox cbb = new ComboBox(); paneel.Controls.Add(cbb);
+        /*ComboBox cbb = new ComboBox(); paneel.Controls.Add(cbb);
         cbb.Location = new Point(240, 0); 
         cbb.DropDownStyle = ComboBoxStyle.DropDownList; 
         cbb.SelectedValueChanged += schetscontrol.VeranderKleur;
         foreach (string k in kleuren)
             cbb.Items.Add(k);
-        cbb.SelectedIndex = 0;
+        cbb.SelectedIndex = 0;*/
     }
     //GEWIJZIGD!
     private void saving(object sender, System.EventArgs e)
@@ -245,6 +254,16 @@ public class SchetsWin : Form
         }
         
     }
+    //erbij gedaan
+    private void maakKleurMenu(object sender, EventArgs e) {
+        ColorDialog colorPicker = new ColorDialog(); 
+        if (colorPicker.ShowDialog() == DialogResult.OK)
+        {
+            kleurKiezen.BackColor = colorPicker.Color;
+            schetscontrol.VeranderKleur(kleurKiezen);
+        }
+    }
+
     public void openObject(object sender, EventArgs e)
     {
         OpenFileDialog dialog = new OpenFileDialog();
