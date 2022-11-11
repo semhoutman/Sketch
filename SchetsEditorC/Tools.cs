@@ -157,7 +157,7 @@ public class LijnTool : TweepuntTool
         double dCirkel = ((x-mX)*(x-mX))/(a*a) + ((y-mY)*(y-mY))/(b*b);
         return dCirkel;
     }
-
+    //GEWIJZIGD!
     public ObjectGetekend checkbounds(SchetsControl s, Point p)
     {
         int x = p.X;
@@ -170,17 +170,15 @@ public class LijnTool : TweepuntTool
             int? checkYb = getobj.start.Y < getobj.eind.Y ? getobj.start.Y : getobj.eind.Y;
             int? checkYe = getobj.start.Y > getobj.eind.Y ? getobj.start.Y : getobj.eind.Y;
 
-            // niks met bounding te maken
-            if (getobj.type.ToString() == "lijn")
-            {
-                double afstand = (Math.Abs((getobj.eind.X - getobj.start.X) * (getobj.start.Y - y) - 
-                    (getobj.start.X - x) * (getobj.eind.Y - getobj.start.Y))) / (Math.Sqrt((getobj.eind.X - getobj.start.X) * 
-                    (getobj.eind.X - getobj.start.X) + (getobj.eind.Y - getobj.start.Y) * (getobj.eind.Y - getobj.start.Y)));
-                if (afstand <= getobj.dikte && afstand >= -1*getobj.dikte)
+           
+           if (getobj.type.ToString() == "lijn")
                 {
-                    eindObject = getobj;
+                    double afstand = (Math.Abs((getobj.eind.X - getobj.start.X) * (getobj.start.Y - y) - (getobj.start.X - x) * (getobj.eind.Y - getobj.start.Y))) / (Math.Sqrt((getobj.eind.X - getobj.start.X) * (getobj.eind.X - getobj.start.X) + (getobj.eind.Y - getobj.start.Y) * (getobj.eind.Y - getobj.start.Y)));
+                    if (afstand <= getobj.dikte && afstand >= -1 * getobj.dikte)
+                    {
+                        eindObject = getobj;
+                    }
                 }
-            }
             
             if ((x >= checkXb && x <= checkXe) && (y >= checkYb && y <= checkYe))
             {
@@ -208,10 +206,14 @@ public class LijnTool : TweepuntTool
                         break;
 
                      case "kader":
-                        bool randl = ((x >= checkXb - getobj.dikte && x <= checkXb + getobj.dikte) && (y >= checkYb && y <= checkYe));
-                        bool randr = ((x >= checkXe - getobj.dikte && x <= checkXe + getobj.dikte) && (y >= checkYb && y <= checkYe));
-                        bool randb = ((x >= checkXb && x <= checkXe) && (y >= checkYb - getobj.dikte && y <= checkYb + getobj.dikte));
-                        bool rando = ((x >= checkXb && x <= checkXe) && (y >= checkYe - getobj.dikte && y <= checkYe + getobj.dikte));
+                        bool randl = ((x >= checkXb - getobj.dikte && x 
+                        <= checkXb + getobj.dikte) && (y >= checkYb && y <= checkYe));
+                        bool randr = ((x >= checkXe - getobj.dikte && x 
+                        <= checkXe + getobj.dikte) && (y >= checkYb && y <= checkYe));
+                        bool randb = ((x >= checkXb && x <= checkXe) &&
+                        (y >= checkYb - getobj.dikte && y <= checkYb + getobj.dikte));
+                        bool rando = ((x >= checkXb && x <= checkXe) &&
+                        (y >= checkYe - getobj.dikte && y <= checkYe + getobj.dikte));
                         if (randl || randr || randb || rando)
                         {
                             eindObject = getobj;
@@ -246,7 +248,7 @@ public class PenTool : LijnTool
 //VERANDERD!
 public class ObjectGumTool : PenTool
 {
-    public override string ToString() { return "delete"; }
+    public override string ToString() { return "gum"; }
 
     public override void MuisLos(SchetsControl s, Point p)
     { 

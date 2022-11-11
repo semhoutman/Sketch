@@ -8,7 +8,7 @@ using static Schets;
 public class SchetsControl : UserControl
 {   
     public Schets schets;
-    private Color penkleur;
+    private Color penkleur= Color.Black;
     private int pengrootte = 3;
 
     public Color PenKleur
