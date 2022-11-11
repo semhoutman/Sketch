@@ -50,8 +50,8 @@ public class SchetsControl : UserControl
         schets.Roteer();
         this.Invalidate();
     }
-    public void VeranderKleur(Button kleurKiezen)
-    {   Color kleurNaam = kleurKiezen.BackColor;
+    public void VeranderKleur(Button kleurKiezer)
+    {   Color kleurNaam = kleurKiezer.BackColor;
         penkleur = kleurNaam;
     }
 

@@ -13,7 +13,7 @@ public class SchetsWin : Form
     SchetsControl schetscontrol;
     ISchetsTool huidigeTool;
     Panel paneel;
-    Button kleurKiezen;
+    Button kleurKiezer;
     Bitmap penGrootteBitmap;
     Label penGrootteLabel;
     bool vast;
@@ -80,7 +80,7 @@ public class SchetsWin : Form
                                         vast = false; 
                                     };
         schetscontrol.KeyPress +=  (object o, KeyPressEventArgs kpea) => 
-                                    {   huidigeTool.Letter  (schetscontrol, kpea.KeyChar, kleurKiezen.BackColor, false); 
+                                    {   huidigeTool.Letter  (schetscontrol, kpea.KeyChar, kleurKiezer.BackColor, false); 
                                     };
         this.Controls.Add(schetscontrol);
 
@@ -136,7 +136,7 @@ public class SchetsWin : Form
         menu.DropDownItems.Add("Clear", null, schetscontrol.Schoon );
         menu.DropDownItems.Add("Roteer", null, schetscontrol.Roteer );
         //erbij gedaan
-        menu.DropDownItems.Add("Kies kleur", null, maakKleurMenu);
+        menu.DropDownItems.Add("Kies kleur", null, KleurMenu);
         menuStrip.Items.Add(menu);
         //ToolStripMenuItem submenu = new ToolStripMenuItem("Kies kleur");
        /* foreach (string k in kleuren)
@@ -183,14 +183,14 @@ public class SchetsWin : Form
            
         Label penkleur = new Label(); paneel.Controls.Add(penkleur);
         penkleur.Text = "Penkleur:"; 
-        penkleur.Location = new Point(180, 3); 
+        penkleur.Location = new Point(440, 3); 
         penkleur.AutoSize = true; 
         
         //erbij gedaan
-        kleurKiezen = new Button(); paneel.Controls.Add(kleurKiezen);
-        kleurKiezen.BackColor = Color.Red;
-        kleurKiezen.Location = new Point(380, 0);
-        kleurKiezen.Click += maakKleurMenu;
+        kleurKiezer = new Button(); paneel.Controls.Add(kleurKiezer);
+        kleurKiezer.BackColor = Color.White;
+        kleurKiezer.Location = new Point(510, 0);
+        kleurKiezer.Click += KleurMenu;
             
         /*ComboBox cbb = new ComboBox(); paneel.Controls.Add(cbb);
         cbb.Location = new Point(240, 0); 
@@ -255,12 +255,12 @@ public class SchetsWin : Form
         
     }
     //erbij gedaan
-    private void maakKleurMenu(object sender, EventArgs e) {
+    private void KleurMenu(object sender, EventArgs e) {
         ColorDialog colorPicker = new ColorDialog(); 
         if (colorPicker.ShowDialog() == DialogResult.OK)
         {
-            kleurKiezen.BackColor = colorPicker.Color;
-            schetscontrol.VeranderKleur(kleurKiezen);
+            kleurKiezer.BackColor = colorPicker.Color;
+            schetscontrol.VeranderKleur(kleurKiezer);
         }
     }
 
