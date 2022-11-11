@@ -114,8 +114,6 @@ public class SchetsWin : Form
 
     }
 
-   
-
     private void maakToolMenu(ICollection<ISchetsTool> tools)
     {   
         ToolStripMenuItem menu = new ToolStripMenuItem("Tool");
@@ -136,7 +134,7 @@ public class SchetsWin : Form
         menu.DropDownItems.Add("Clear", null, schetscontrol.Schoon );
         menu.DropDownItems.Add("Roteer", null, schetscontrol.Roteer );
         //erbij gedaan
-        menu.DropDownItems.Add("Kies kleur", null, KleurMenu);
+        //menu.DropDownItems.Add("Kies kleur", null, KleurMenu);
         menuStrip.Items.Add(menu);
         //ToolStripMenuItem submenu = new ToolStripMenuItem("Kies kleur");
        /* foreach (string k in kleuren)
