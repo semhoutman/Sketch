@@ -189,14 +189,6 @@ public class SchetsWin : Form
         kleurKiezer.BackColor = Color.White;
         kleurKiezer.Location = new Point(510, 0);
         kleurKiezer.Click += KleurMenu;
-            
-        /*ComboBox cbb = new ComboBox(); paneel.Controls.Add(cbb);
-        cbb.Location = new Point(240, 0); 
-        cbb.DropDownStyle = ComboBoxStyle.DropDownList; 
-        cbb.SelectedValueChanged += schetscontrol.VeranderKleur;
-        foreach (string k in kleuren)
-            cbb.Items.Add(k);
-        cbb.SelectedIndex = 0;*/
     }
     //GEWIJZIGD!
     private void saving(object sender, System.EventArgs e)
@@ -209,17 +201,7 @@ public class SchetsWin : Form
             schetscontrol.schets.bitmap.Save(saveFileDialog1.FileName); 
         }    
     }
-    //GEWIJZIGD!
-     private void savingbm(object sender, System.EventArgs e)
-    {
-        SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-        saveFileDialog1.Filter = "BitMap|*.bmp";
-        saveFileDialog1.Title = "Save a BitMap File";
-        if (saveFileDialog1.ShowDialog() == DialogResult.OK)
-        {
-            schetscontrol.schets.bitmap.Save(saveFileDialog1.FileName); 
-        }    
-    }
+
     //GEWIJZIGD!
    private void openen(object sender, System.EventArgs e)
     {
