@@ -149,6 +149,79 @@ public class LijnTool : TweepuntTool
     public override void Bezig(Graphics g, Point p1, Point p2)
     {   g.DrawLine(MaakPen(this.kwast,3), p1, p2);
     }
+    public double dCirkel(int x, int y, int bX, int eX, int bY, int eY) {
+        double a = (eX - bX)/2;
+        double b = (eY - bY)/2;
+        double mX = bX + a;
+        double mY = bY + b;
+        double dCirkel = ((x-mX)*(x-mX))/(a*a) + ((y-mY)*(y-mY))/(b*b);
+        return dCirkel;
+    }
+
+    public ObjectGetekend checkbounds(SchetsControl s, Point p)
+    {
+        int x = p.X;
+        int y = p.Y;
+        ObjectGetekend eindObject = null;
+        foreach (ObjectGetekend getobj in s.schets.Objectengetekend)
+        {
+            int? checkXb= getobj.start.X < getobj.eind.X ? getobj.start.X : getobj.eind.X;
+            int? checkXe = getobj.start.X > getobj.eind.X ? getobj.start.X : getobj.eind.X;
+            int? checkYb = getobj.start.Y < getobj.eind.Y ? getobj.start.Y : getobj.eind.Y;
+            int? checkYe = getobj.start.Y > getobj.eind.Y ? getobj.start.Y : getobj.eind.Y;
+
+            // niks met bounding te maken
+            if (getobj.type.ToString() == "lijn")
+            {
+                double afstand = (Math.Abs((getobj.eind.X - getobj.start.X) * (getobj.start.Y - y) - 
+                    (getobj.start.X - x) * (getobj.eind.Y - getobj.start.Y))) / (Math.Sqrt((getobj.eind.X - getobj.start.X) * 
+                    (getobj.eind.X - getobj.start.X) + (getobj.eind.Y - getobj.start.Y) * (getobj.eind.Y - getobj.start.Y)));
+                if (afstand <= getobj.dikte && afstand >= -1*getobj.dikte)
+                {
+                    eindObject = getobj;
+                }
+            }
+            
+            if ((x >= checkXb && x <= checkXe) && (y >= checkYb && y <= checkYe))
+            {
+                switch (getobj.type.ToString()) {
+                    case "vlak": case "tekst":
+                        eindObject = getobj;
+                        break;
+
+                    case "cirkel":
+                        // formule voor ellipse:
+                        // (x-mx)^2/a^2 + (y-my)^2/b^2
+                        double DCirkel = dCirkel(x, y, (int)checkXb, (int)checkXe, (int)checkYb, (int)checkYe);
+                        if (DCirkel <= 1+(double)((double)getobj.dikte/100))
+                        {
+                            eindObject = getobj;
+                        }
+                        break;
+
+                    case "rand":
+                        double dCirkelrand = dCirkel(x, y, (int)checkXb, (int)checkXe, (int)checkYb, (int)checkYe);
+                        if (dCirkelrand <= 1+(double)((double)getobj.dikte/100) && dCirkelrand >= 1-(double)((double)getobj.dikte/100))
+                        {
+                            eindObject = getobj;
+                        }
+                        break;
+
+                     case "kader":
+                        bool randl = ((x >= checkXb - getobj.dikte && x <= checkXb + getobj.dikte) && (y >= checkYb && y <= checkYe));
+                        bool randr = ((x >= checkXe - getobj.dikte && x <= checkXe + getobj.dikte) && (y >= checkYb && y <= checkYe));
+                        bool randb = ((x >= checkXb && x <= checkXe) && (y >= checkYb - getobj.dikte && y <= checkYb + getobj.dikte));
+                        bool rando = ((x >= checkXb && x <= checkXe) && (y >= checkYe - getobj.dikte && y <= checkYe + getobj.dikte));
+                        if (randl || randr || randb || rando)
+                        {
+                            eindObject = getobj;
+                        }
+                        break;
+                }
+            }
+        }
+        return eindObject;
+    }
 }
 
 public class PenTool : LijnTool
@@ -161,12 +234,32 @@ public class PenTool : LijnTool
     }
 }
     
-public class GumTool : PenTool
+/*public class GumTool : PenTool
 {
-    public override string ToString() { return "gum"; }
+      public override string ToString() { return "gum"; }
 
     public override void Bezig(Graphics g, Point p1, Point p2)
-    {   g.DrawLine(MaakPen(Brushes.White, 7), p1, p2);
+    {   g.DrawLine(MaakPen(Brushes.White, pengrootte+2), p1, p2);
+    }
+}*/
+
+//VERANDERD!
+public class ObjectGumTool : PenTool
+{
+    public override string ToString() { return "delete"; }
+
+    public override void MuisLos(SchetsControl s, Point p)
+    { 
+        verwijderObject(s, checkbounds(s,p));
+    }
+
+    private void verwijderObject(SchetsControl s, ObjectGetekend obj)
+    {
+        if (obj != null) 
+        {
+            s.schets.Objectengetekend.Remove(obj);
+            s.TekenBitmapUitLijst();
+        }
     }
 }
 
@@ -190,3 +283,4 @@ public class CirkelTool : RandTool
         g.FillEllipse(kwast, TweepuntTool.Punten2Rechthoek(p1, p2));
     }
 }
+

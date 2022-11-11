@@ -14,9 +14,9 @@ public class SchetsWin : Form
     ISchetsTool huidigeTool;
     Panel paneel;
     Button kleurKiezer;
-    Bitmap penGrootteBitmap;
-    Label penGrootteLabel;
+
     bool vast;
+
     ISchetsTool[] tempTools = { new PenTool()
                                 , new LijnTool()
                                 , new RechthoekTool()
@@ -24,7 +24,7 @@ public class SchetsWin : Form
                                 , new RandTool()
                                 , new CirkelTool()
                                 , new TekstTool()
-                                , new GumTool()
+                                , new ObjectGumTool()
                                 };
 
     private void veranderAfmeting(object o, EventArgs ea)
@@ -57,7 +57,7 @@ public class SchetsWin : Form
                                 , new VolRechthoekTool()
                                 , new RandTool ()
                                 , new CirkelTool() , new TekstTool()
-                                , new GumTool()
+                                , new ObjectGumTool()
                                 };
         String[] deKleuren = { "Black", "Red", "Green", "Blue", "Yellow", "Magenta", "Cyan" };
 
@@ -123,7 +123,14 @@ public class SchetsWin : Form
         {   ToolStripItem item = new ToolStripMenuItem();
             item.Tag = tool;
             item.Text = tool.ToString();
-            item.Image = new Bitmap($"../../../Icons/{tool.ToString()}.png");
+            try 
+            {
+                item.Image = new Bitmap($"../../../Icons/{tool.ToString()}.png");
+            } 
+            catch 
+            {
+                item.Image = new Bitmap($"Icons/{tool.ToString()}.png");
+            }
             item.Click += this.klikToolMenu;
             menu.DropDownItems.Add(item);
         }
@@ -138,11 +145,7 @@ public class SchetsWin : Form
         //erbij gedaan
         menu.DropDownItems.Add("Kies kleur", null, KleurMenu);
         menuStrip.Items.Add(menu);
-        //ToolStripMenuItem submenu = new ToolStripMenuItem("Kies kleur");
-       /* foreach (string k in kleuren)
-            submenu.DropDownItems.Add(k, null, schetscontrol.VeranderKleur);
-            menu.DropDownItems.Add(submenu);
-            menuStrip.Items.Add(menu);*/
+
     }
 
     private void maakToolButtons(ICollection<ISchetsTool> tools)
@@ -263,28 +266,28 @@ public class SchetsWin : Form
                         string fullLine = line;
                         string[] objectStrings = fullLine.Split(";");
                         foreach (string objectString in objectStrings) {
-                            string[] objectProps = objectString.Split("~");
-                            if (objectProps.Length > 1) { 
+                            string[] ObjProp= objectString.Split("~");
+                            if (ObjProp.Length > 1) { 
 
                                 ISchetsTool tool = tempTools[0];
 
                                 foreach (ISchetsTool t in tempTools) {
-                                    if (t.ToString() == objectProps[0]) {
+                                    if (t.ToString() == ObjProp[0]) {
                                         tool = t;
                                     }
                                 }
 
-                            string[] rgbStrings = objectProps[5].Split("-");
+                            string[] rgbS = ObjProp[5].Split("-");
 
-                                 ObjectGetekend gObj = new ObjectGetekend(   
+                                 ObjectGetekend getobj = new ObjectGetekend(   
                                         tool,
-                                        new Point(Int32.Parse(objectProps[1]), Int32.Parse(objectProps[2])),
-                                        new Point(Int32.Parse(objectProps[3]), Int32.Parse(objectProps[4])),
-                                        Color.FromArgb(Int32.Parse(rgbStrings[0]), Int32.Parse(rgbStrings[1]), Int32.Parse(rgbStrings[2]), Int32.Parse(rgbStrings[3])), 
-                                        Int32.Parse(objectProps[6]),
-                                        objectProps[7]
+                                        new Point(Int32.Parse(ObjProp[1]), Int32.Parse(ObjProp[2])),
+                                        new Point(Int32.Parse(ObjProp[3]), Int32.Parse(ObjProp[4])),
+                                        Color.FromArgb(Int32.Parse(rgbS[0]), Int32.Parse(rgbS[1]), Int32.Parse(rgbS[2]), Int32.Parse(rgbS[3])), 
+                                        Int32.Parse(ObjProp[6]),
+                                        ObjProp[7]
                                     );
-                                schetscontrol.schets.Objectengetekend.Add(gObj);
+                                schetscontrol.schets.Objectengetekend.Add(getobj);
                             }
                         }
                         schetscontrol.TekenBitmapUitLijst();
